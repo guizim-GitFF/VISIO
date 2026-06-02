@@ -78,26 +78,20 @@ Plataforma para identificação de sensores IOT
   *Sprint 3 - 0%*
 
 
-  ## MER
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/der.png" width="700">
+## MER
+<img src="banco%20de%20dados/MER_VISIO.jpg" width="700">
 
-  ## DER
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/derr.png" width="700">
+## DER
+<img src="banco%20de%20dados/DER_VISIO.jpg" width="700">
 
-  ## DICIONARIO DE DADOS
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/dicionario.png" width="700">
+## DIAGRAMA DE CASOS DE USO
+<img src="banco%20de%20dados/diagrama_casos_uso.png" width="700">
 
-  ## BANCO DE DADOS FÍSICO
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/bd.png" width="700">
+## DIAGRAMA DE FLUXO
+<img src="banco%20de%20dados/diagrama_fluxo.png" width="500">
 
-  ## DIAGRAMA DE CASOS DE USO
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/diagrama_casos_uso.png" width="700">
-
-  ## DIAGRAMA DE FLUXO
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/diagrama_fluxo.png" width="500">
-
-  ## DIAGRAMA DE CLASSES
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/diagraam_classes.png" width="700">
+## DIAGRAMA DE CLASSES
+<img src="banco%20de%20dados/Diagrama_de_Classes_VISIO.png" width="700">
   
 
 
