@@ -137,7 +137,7 @@ Plataforma para identificação de sensores IOT
 
 
 # VISIO
-<img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/imagens/logo_visio.png" width="500">
+<img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/imagens/logo_escuro.png" width="500">
 Platform for identification of IOT sensors
 
 ## PROBLEM
