@@ -85,7 +85,7 @@ Plataforma para identificação de sensores IOT
   <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/DER_VISIO.jpg" width="700">
 
   ## DICIONARIO DE DADOS
-  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/dicionario.png" width="700">
+  <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco de dados/dicionario.png" width="700">
 
   ## BANCO DE DADOS FÍSICO
   <img src="https://github.com/2IDS-A-TAMB-2026/VISIO/blob/main/banco%20de%20dados/banco/bd.png" width="700">
