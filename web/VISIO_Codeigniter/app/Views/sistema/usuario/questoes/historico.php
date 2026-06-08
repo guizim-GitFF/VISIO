@@ -1,53 +1,77 @@
 <?= view('sistema/layout/header') ?>
 
+<main class="questoes-page">
+    <div class="questoes-container">
+        <h1 class="questoes-titulo">Histórico de Respostas</h1>
 
-    <main class="questoes-page">
-        <div class="questoes-container">
-            <h1 class="questoes-titulo">Histórico de Respostas</h1>
+        <?php if (session()->getFlashdata('sucesso')): ?>
+            <p class="contato-feedback contato-feedback--ok"><?= session()->getFlashdata('sucesso') ?></p>
+        <?php endif; ?>
+        <?php if (session()->getFlashdata('erro')): ?>
+            <p class="contato-feedback contato-feedback--erro"><?= session()->getFlashdata('erro') ?></p>
+        <?php endif; ?>
 
-            <?php if (session()->getFlashdata('sucesso')): ?>
-                <p class="contato-feedback contato-feedback--ok"><?= session()->getFlashdata('sucesso') ?></p>
+        <?php
+            // Compatível com RespostaController (respostas + total + total_acertos)
+            // e com UsuarioController::historico (historico)
+            $lista  = $respostas ?? $historico ?? [];
+            $qtd    = count($lista);
+            $acertos = 0;
+            foreach ($lista as $r) {
+                if (!empty($r['IS_CORRETA'])) $acertos++;
+            }
+        ?>
+
+        <p style="margin-bottom:1rem;">
+            Total de respostas: <strong><?= $qtd ?></strong> |
+            Acertos: <strong><?= $acertos ?></strong>
+            <?php if ($qtd > 0): ?>
+                | Taxa: <strong><?= round(($acertos / $qtd) * 100) ?>%</strong>
             <?php endif; ?>
-            <?php if (session()->getFlashdata('erro')): ?>
-                <p class="contato-feedback contato-feedback--erro"><?= session()->getFlashdata('erro') ?></p>
-            <?php endif; ?>
+        </p>
 
-            <p>Total de respostas: <strong><?= $total ?></strong> | Acertos: <strong><?= $total_acertos ?></strong></p>
-
-            <?php if (empty($respostas)): ?>
-                <p>Nenhuma resposta registrada ainda.</p>
-            <?php else: ?>
-                <table class="adm-table" style="width:100%; margin-top:1rem; border-collapse: collapse;">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Pergunta</th>
-                            <th>Resposta</th>
-                            <th>Resultado</th>
-                            <th>Data</th>
-                            <th>Ação</th>
+        <?php if (empty($lista)): ?>
+            <p style="color:var(--color-text-secondary);">Nenhuma resposta registrada ainda. Faça o quiz para começar!</p>
+            <a href="<?= base_url('/quiz') ?>" class="animated-button" style="margin-top:1rem;display:inline-block;">Iniciar Quiz</a>
+        <?php else: ?>
+            <div style="overflow-x:auto;">
+            <table class="adm-table" style="width:100%;margin-top:1rem;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">#</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Pergunta</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Resposta dada</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Nível</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Resultado</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Data/Hora</th>
+                        <th style="text-align:left;padding:12px;border-bottom:2px solid var(--color-border);">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($lista as $i => $r): ?>
+                        <tr style="border-bottom:1px solid var(--color-border);">
+                            <td style="padding:12px;"><?= $i + 1 ?></td>
+                            <td style="padding:12px;"><?= esc($r['PERGUNTA_TEXTO'] ?? '—') ?></td>
+                            <td style="padding:12px;"><?= esc($r['ALTERNATIVA_TEXTO'] ?? '—') ?></td>
+                            <td style="padding:12px;"><?= esc($r['NIVEL_DIFICULDADE'] ?? '—') ?></td>
+                            <td style="padding:12px;">
+                                <?= !empty($r['IS_CORRETA']) ? '✅ Acerto' : '❌ Erro' ?>
+                            </td>
+                            <td style="padding:12px;"><?= esc($r['RESPONDIDO_EM'] ?? '—') ?></td>
+                            <td style="padding:12px;">
+                                <a href="<?= base_url('/resposta/excluir/' . esc($r['ID_RESPONDE'])) ?>"
+                                   onclick="return confirm('Remover esta resposta do histórico?')"
+                                   style="color:#ef4444;font-weight:600;">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($respostas as $r): ?>
-                            <tr>
-                                <td><?= $r['ID_RESPOSTA'] ?? $r['ID'] ?></td>
-                                <td><?= esc($r['PERGUNTA'] ?? '—') ?></td>
-                                <td><?= esc($r['ALTERNATIVA'] ?? '—') ?></td>
-                                <td><?= ($r['CORRETA_ERRADA'] ?? 0) ? '✅ Acerto' : '❌ Erro' ?></td>
-                                <td><?= $r['DATA_HORA'] ?? '—' ?></td>
-                                <td>
-                                    <a href="<?= base_url('/resposta/excluir/' . ($r['ID_RESPOSTA'] ?? $r['ID'])) ?>"
-                                       onclick="return confirm('Remover esta resposta?')"
-                                       style="color: red;">Excluir</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
-    </main>
-
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            </div>
+        <?php endif; ?>
+    </div>
+</main>
 
 <?= view('sistema/layout/footer') ?>

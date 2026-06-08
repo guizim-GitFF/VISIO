@@ -16,16 +16,34 @@ use App\Models\RespondeModel;
 class AdminController extends BaseController
 {
     // ---------------------------------------------------------------
-    // DASHBOARD
+    // DASHBOARD — com dados reais do banco
     // ---------------------------------------------------------------
 
     public function dashboard(): string
     {
-        return view('sistema/admin/login_adm', [
-            'total_usuarios' => (new UsuarioModel())->countAllResults(), // countAllResults é nativo do CI4
+        $respondeModel = new RespondeModel();
+        $totalRespostas = $respondeModel->countAllResults();
+        $totalAcertos = 0;
+
+        if ($totalRespostas > 0) {
+            $row = $respondeModel->db->table('RESPONDE r')
+                ->selectSum('a.IS_CORRETA', 'acertos')
+                ->join('ALTERNATIVA a', 'a.ID_ALTERNATIVA = r.FK_ID_ALTERNATIVA')
+                ->get()->getRow();
+            $totalAcertos = $row ? (int) $row->acertos : 0;
+        }
+
+        $taxaAcerto = $totalRespostas > 0
+            ? round(($totalAcertos / $totalRespostas) * 100)
+            : 0;
+
+        return view('sistema/admin/index', [
+            'total_usuarios' => (new UsuarioModel())->countAllResults(),
             'total_sensores' => (new SensorModel())->countAllResults(),
             'total_perguntas' => (new PerguntaModel())->countAllResults(),
-            'total_respostas' => (new RespondeModel())->countAllResults(),
+            'total_respostas' => $totalRespostas,
+            'total_acertos' => $totalAcertos,
+            'taxa_acerto' => $taxaAcerto,
         ]);
     }
 
@@ -36,13 +54,13 @@ class AdminController extends BaseController
     public function usuarios(): string
     {
         return view('sistema/admin/usuarios/index', [
-            'usuarios' => (new UsuarioModel())->findAll(), // findAll() é nativo do CI4
+            'usuarios' => (new UsuarioModel())->findAll(),
         ]);
     }
 
     public function excluirUsuario(string $cpf)
     {
-        (new UsuarioModel())->delete($cpf); // delete() é nativo do CI4
+        (new UsuarioModel())->delete($cpf);
         return redirect()->to('/admin/usuarios')
             ->with('sucesso', 'Usuário removido com sucesso.');
     }
@@ -53,14 +71,14 @@ class AdminController extends BaseController
 
     public function sensores(): string
     {
-        return view('sistema/admin/c_sensor/index', [
+        return view('sistema/admin/sensores/index', [
             'sensores' => (new SensorModel())->findAll(),
         ]);
     }
 
     public function novoSensorForm(): string
     {
-        return view('sistema/admin/c_sensor/novo_sensor');
+        return view('sistema/admin/sensores/novo_sensor');
     }
 
     public function inserirSensor()
@@ -70,14 +88,15 @@ class AdminController extends BaseController
 
         if ($arquivo && $arquivo->isValid() && !$arquivo->hasMoved()) {
             $novoNome = $arquivo->getRandomName();
-            $arquivo->move(WRITEPATH . 'uploads/sensores', $novoNome);
+
+            $arquivo->move(ROOTPATH . 'public/uploads/sensores', $novoNome);
             $foto = 'uploads/sensores/' . $novoNome;
         }
 
-        // CORREÇÃO: Removido 'CIRCUITO' e adicionado 'NOME' (alinhado com o Banco de Dados)
         (new SensorModel())->insert([
             'NOME' => $this->request->getPost('nome'),
             'DESCRICAO' => $this->request->getPost('descricao'),
+            'CIRCUITO' => $this->request->getPost('circuito') ?? '',
             'FOTO' => $foto,
         ]);
 
@@ -87,7 +106,7 @@ class AdminController extends BaseController
 
     public function editarSensorForm(int $id): string
     {
-        return view('sistema/admin/c_sensor/editar_sensor', [
+        return view('sistema/admin/sensores/editar_sensor', [
             'sensor' => (new SensorModel())->find($id),
         ]);
     }
@@ -100,25 +119,37 @@ class AdminController extends BaseController
 
         $arquivo = $this->request->getFile('foto');
         if ($arquivo && $arquivo->isValid() && !$arquivo->hasMoved()) {
+
+            if (!empty($sensor['FOTO']) && file_exists(ROOTPATH . 'public/' . $sensor['FOTO'])) {
+                unlink(ROOTPATH . 'public/' . $sensor['FOTO']);
+            }
+
             $novoNome = $arquivo->getRandomName();
-            $arquivo->move(WRITEPATH . 'uploads/sensores', $novoNome);
+            $arquivo->move(ROOTPATH . 'public/uploads/sensores', $novoNome);
             $foto = 'uploads/sensores/' . $novoNome;
         }
 
-        // CORREÇÃO: Removido 'CIRCUITO' e adicionado 'NOME'
         $model->update($id, [
             'NOME' => $this->request->getPost('nome'),
             'DESCRICAO' => $this->request->getPost('descricao'),
+            'CIRCUITO' => $this->request->getPost('circuito') ?? '',
             'FOTO' => $foto,
         ]);
 
         return redirect()->to('/admin/sensores')
-            ->with('sucesso', 'Sensor atualizado com sucesso.');
+            ->with('sucesso', 'Sensor updated.');
     }
 
     public function excluirSensor(int $id)
     {
-        (new SensorModel())->delete($id);
+        $model = new SensorModel();
+        $sensor = $model->find($id);
+
+        if ($sensor && !empty($sensor['FOTO']) && file_exists(ROOTPATH . 'public/' . $sensor['FOTO'])) {
+            unlink(ROOTPATH . 'public/' . $sensor['FOTO']);
+        }
+
+        $model->delete($id);
         return redirect()->to('/admin/sensores')
             ->with('sucesso', 'Sensor removido.');
     }
@@ -129,25 +160,23 @@ class AdminController extends BaseController
 
     public function perguntas(): string
     {
-        return view('sistema/admin/c_questoes/index', [
-            'perguntas' => (new PerguntaModel())->listarComAlternativas(), // Necessita método no Model
+        return view('sistema/admin/quiz/index', [
+            'perguntas' => (new PerguntaModel())->listarComAlternativas(),
         ]);
     }
 
     public function novaPerguntaForm(): string
     {
-        return view('sistema/admin/c_questoes/nova_questao');
+        return view('sistema/admin/quiz/nova_pergunta');
     }
-
     public function inserirPergunta()
     {
         $perguntaModel = new PerguntaModel();
         $alternativaModel = new AlternativaModel();
 
-        // CI4 retorna o ID inserido automaticamente se a chave primária for AUTO_INCREMENT
         $idPergunta = $perguntaModel->insert([
             'DESCRICAO' => $this->request->getPost('descricao'),
-            'NIVEL_DIFICULDADE' => $this->request->getPost('nivel_dificuldade'),
+            'NIVEL_DIFICULDADE' => $this->request->getPost('nivel'),
         ]);
 
         if ($idPergunta) {
@@ -163,12 +192,11 @@ class AdminController extends BaseController
             foreach ($alternativas as $alt) {
                 $lote[] = [
                     'DESCRICAO' => $alt['texto'],
-                    'IS_CORRETA' => ($alt['letra'] === $correta) ? 1 : 0, // CORREÇÃO DO NOME DA COLUNA
+                    'IS_CORRETA' => ($alt['letra'] === $correta) ? 1 : 0,
                     'FK_ID_PERGUNTA' => $idPergunta,
                 ];
             }
 
-            // Usando o método nativo do CI4 para inserir múltiplos registros de uma vez
             $alternativaModel->insertBatch($lote);
         }
 
@@ -178,7 +206,7 @@ class AdminController extends BaseController
 
     public function editarPerguntaForm(int $id): string
     {
-        return view('sistema/admin/c_questoes/editar_questao', [
+        return view('sistema/admin/quiz/editar_questao', [
             'pergunta' => (new PerguntaModel())->buscarComAlternativas($id),
         ]);
     }
@@ -190,7 +218,7 @@ class AdminController extends BaseController
 
         $perguntaModel->update($id, [
             'DESCRICAO' => $this->request->getPost('descricao'),
-            'NIVEL_DIFICULDADE' => $this->request->getPost('nivel_dificuldade'),
+            'NIVEL_DIFICULDADE' => $this->request->getPost('nivel'),
         ]);
 
         $idsAlternativas = $this->request->getPost('id_alternativa');
@@ -201,7 +229,7 @@ class AdminController extends BaseController
             foreach ($idsAlternativas as $i => $idAlt) {
                 $alternativaModel->update((int) $idAlt, [
                     'DESCRICAO' => $textos[$i],
-                    'IS_CORRETA' => ($idAlt == $correta) ? 1 : 0, // CORREÇÃO DO NOME DA COLUNA
+                    'IS_CORRETA' => ($idAlt == $correta) ? 1 : 0,
                 ]);
             }
         }
@@ -212,21 +240,32 @@ class AdminController extends BaseController
 
     public function excluirPergunta(int $id)
     {
-        // OTIMIZAÇÃO: O MySQL cuidará de apagar as alternativas por causa do ON DELETE CASCADE
-        (new PerguntaModel())->delete($id);
-
+        (new PerguntaModel())->delete($id); // CASCADE apaga as alternativas
         return redirect()->to('/admin/perguntas')
             ->with('sucesso', 'Pergunta e alternativas removidas com sucesso.');
     }
 
     // ---------------------------------------------------------------
-    // HISTÓRICO GERAL DE RESPOSTAS
+    // HISTÓRICO GERAL DE RESPOSTAS — CORRIGIDO: view dedicada
     // ---------------------------------------------------------------
 
     public function respostas(): string
     {
-        return view('sistema/admin/c_questoes_2/index', [
-            'respostas' => (new RespondeModel())->listarComDetalhes(), // Necessita método no Model com JOIN
+        return view('sistema/admin/respostas/index', [
+            'respostas' => (new RespondeModel())->listarComDetalhes(),
+        ]);
+    }
+
+    // ---------------------------------------------------------------
+    // PERFIL DO ADMINISTRADOR
+    // ---------------------------------------------------------------
+
+    public function perfil(): string
+    {
+        $cnpj = session()->get('admin_cnpj');
+        $model = new AdminModel();
+        return view('sistema/admin/perfil_adm', [
+            'admin' => $model->find($cnpj),
         ]);
     }
 }

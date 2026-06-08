@@ -9,44 +9,57 @@ use App\Models\RespondeModel;
 /**
  * QuizController
  * Fluxo completo do quiz para o usuário logado, integrado ao MySQL.
+ * Rotas protegidas pelo filtro 'userAuth' definido em Routes.php.
+ *
+ * Rotas:
+ *   GET  /quiz           → index()    — inicia o quiz
+ *   GET  /quiz/pergunta  → pergunta() — exibe pergunta atual
+ *   POST /quiz/responder → responder() — registra resposta e avança
+ *   GET  /quiz/resultado → resultado() — exibe resultado final
  */
 class QuizController extends BaseController
 {
+    // ---------------------------------------------------------------
+    // INICIAR QUIZ
+    // ---------------------------------------------------------------
+
     public function index()
     {
-        $model = new PerguntaModel();
-        $perguntas = $model->listarAleatorio(10); // Método que você criará no PerguntaModel
+        $model    = new PerguntaModel();
+        $perguntas = $model->listarAleatorio(10);
 
-        // Validação de segurança: se não houver perguntas no banco, evita erro na tela
         if (empty($perguntas)) {
-            return redirect()->to('/usuario/inicio')->with('erro', 'Ainda não há perguntas suficientes cadastradas para iniciar o quiz.');
+            return redirect()->to('/inicio')
+                ->with('erro', 'Ainda não há perguntas suficientes cadastradas para iniciar o quiz.');
         }
 
         $ids = array_column($perguntas, 'ID_PERGUNTA');
 
         session()->set([
-            'quiz_ids' => $ids,
-            'quiz_indice' => 0,
+            'quiz_ids'     => $ids,
+            'quiz_indice'  => 0,
             'quiz_acertos' => 0,
-            'quiz_total' => count($ids),
+            'quiz_total'   => count($ids),
         ]);
 
         return redirect()->to('/quiz/pergunta');
     }
 
+    // ---------------------------------------------------------------
+    // EXIBIR PERGUNTA ATUAL
+    // ---------------------------------------------------------------
+
     public function pergunta()
     {
-        $ids = session()->get('quiz_ids') ?? [];
+        $ids    = session()->get('quiz_ids') ?? [];
         $indice = session()->get('quiz_indice') ?? 0;
 
         if (empty($ids) || $indice >= count($ids)) {
             return redirect()->to('/quiz/resultado');
         }
 
-        $idAtual = $ids[$indice];
-        $model = new PerguntaModel();
-
-        // Vai buscar a pergunta e fazer um JOIN (ou buscar separado) as alternativas dela
+        $idAtual  = $ids[$indice];
+        $model    = new PerguntaModel();
         $pergunta = $model->buscarComAlternativas($idAtual);
 
         if (!$pergunta) {
@@ -55,30 +68,32 @@ class QuizController extends BaseController
 
         return view('sistema/usuario/questoes/pergunta', [
             'pergunta' => $pergunta,
-            'indice' => $indice + 1,
-            'total' => session()->get('quiz_total'),
+            'indice'   => $indice + 1,
+            'total'    => session()->get('quiz_total'),
         ]);
     }
+
+    // ---------------------------------------------------------------
+    // REGISTRAR RESPOSTA
+    // ---------------------------------------------------------------
 
     public function responder()
     {
         $idAlternativa = (int) $this->request->getPost('id_alternativa');
-        $cpf = session()->get('usuario_cpf');
+        $cpf           = session()->get('usuario_cpf');
 
         if (!$idAlternativa) {
             return redirect()->to('/quiz/pergunta')
                 ->with('erro', 'Selecione uma alternativa antes de avançar.');
         }
 
-        // Registra a resposta na tabela RESPONDE
+        // Registra no banco
         (new RespondeModel())->registrar($cpf, $idAlternativa);
 
-        // Busca a alternativa selecionada usando o método nativo find() do CI4
-        $alternativaModel = new AlternativaModel();
-        $alternativa = $alternativaModel->find($idAlternativa);
+        // Verifica acerto usando IS_CORRETA (coluna correta do banco)
+        $alternativa = (new AlternativaModel())->find($idAlternativa);
 
-        // CORREÇÃO CRÍTICA: O nome da coluna no novo BD é IS_CORRETA (1 = sim, 0 = não)
-        if ($alternativa && $alternativa['IS_CORRETA'] == 1) {
+        if ($alternativa && (int) $alternativa['IS_CORRETA'] === 1) {
             session()->set('quiz_acertos', session()->get('quiz_acertos') + 1);
         }
 
@@ -92,14 +107,17 @@ class QuizController extends BaseController
         return redirect()->to('/quiz/pergunta');
     }
 
+    // ---------------------------------------------------------------
+    // RESULTADO FINAL
+    // ---------------------------------------------------------------
+
     public function resultado()
     {
         $dados = [
             'acertos' => session()->get('quiz_acertos') ?? 0,
-            'total' => session()->get('quiz_total') ?? 0,
+            'total'   => session()->get('quiz_total')   ?? 0,
         ];
 
-        // Limpa a sessão para poder jogar novamente
         session()->remove(['quiz_ids', 'quiz_indice', 'quiz_acertos', 'quiz_total']);
 
         return view('sistema/usuario/questoes/resultado', $dados);

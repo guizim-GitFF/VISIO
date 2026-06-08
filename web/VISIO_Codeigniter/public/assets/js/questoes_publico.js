@@ -78,7 +78,7 @@
     }
 
     // Vai buscar as questões à API
-    fetch("api/questoes.php")
+    fetch("api/index.php")
         .then(function (r) { return r.json(); })
         .then(function (data) {
             if (!Array.isArray(data)) {

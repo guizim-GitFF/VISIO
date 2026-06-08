@@ -31,12 +31,12 @@
             <article class="about-card full-width">
                 <h2 class="titulo_sobre" style="color: #0084f7;">Tecnologias utilizadas</h2>
                 <ul class="tech-tags">
-                    <li style="background-color: #e1e0e0da" style="background-color: #e1e0e0da">HTML</li>
-                    <li style="background-color: #e1e0e0da">CSS</li>
-                    <li style="background-color: #e1e0e0da">JavaScript</li>
-                    <li style="background-color: #e1e0e0da">PHP</li>
-                    <li style="background-color: #e1e0e0da">API REST (JSON)</li>
-                    <li style="background-color: #e1e0e0da">IoT / sensores</li>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                    <li>PHP</li>
+                    <li>API REST (JSON)</li>
+                    <li>IoT / sensores</li>
                 </ul>
             </article>
 

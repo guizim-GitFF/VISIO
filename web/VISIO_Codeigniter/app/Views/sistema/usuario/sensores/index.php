@@ -1,205 +1,99 @@
 <?= view('sistema/layout/header') ?>
 
+<main class="sensores-page-main">
+    <br><br><br>
+    <h1 class="sensores-page-title">Catálogo de Sensores IoT</h1>
+    <p class="sensores-page-lead">Explore os sensores cadastrados na plataforma VISIO.</p>
 
-        <main class="sensores-page-main">
-            <br><br><br>
-            <h1 class="sensores-page-title">Tipos de sensores IoT</h1>
-            <p class="sensores-page-lead">Conheça exemplos de sensores usados em projetos de Internet das Coisas e automação.</p>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
+    var sensoresData = <?= json_encode(array_map(function($s) {
+        return [
+            'id'       => $s['ID_SENSOR'],
+            'nome'     => $s['NOME'],
+            'descricao'=> $s['DESCRICAO'],
+            'foto'     => !empty($s['FOTO']) ? base_url($s['FOTO']) : null,
+            'circuito' => $s['CIRCUITO'] ?? null,
+        ];
+    }, $sensores ?? []), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+
+    function mostrarSensor(id) {
+        var s = sensoresData.find(function(x){ return x.id == id; });
+        if (!s) return;
+
+        var imagemHtml = s.foto
+            ? '<img src="' + s.foto + '" style="max-width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-bottom:1rem;" onerror="this.style.display=\'none\'">'
+            : '';
+
+        var circuitoHtml = s.circuito
+            ? '<p><b>Circuito:</b> ' + s.circuito.replace(/\n/g, '<br>') + '</p>'
+            : '';
+
+        Swal.fire({
+            title: s.nome,
+            html: imagemHtml +
+                '<div style="text-align:left;font-size:15px;line-height:1.8;padding:6px 10px;">' +
+                    '<p>' + s.descricao + '</p>' +
+                    circuitoHtml +
+                '</div>',
+            confirmButtonText: 'Fechar',
+            confirmButtonColor: '#3a86ff',
+            background: '#ffffff',
+            color: '#222',
+            width: '650px',
+            padding: '1.5em',
+            customClass: {
+                title: 'swal-titulo',
+                popup: 'swal-popup'
+            }
+        });
+    }
+    </script>
+
+    <style>
+    .swal-popup  { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.20); }
+    .swal-titulo { text-align: center; font-size: 26px; font-weight: bold; color: #3a86ff; }
+    .cardi       { cursor: pointer; }
+    </style>
+
+    <?php if (empty($sensores)): ?>
+        <div style="text-align:center;padding:3rem;color:var(--color-text-secondary);">
+            <i class="fa-solid fa-microchip" style="font-size:48px;margin-bottom:1rem;display:block;opacity:.3;"></i>
+            <p>Nenhum sensor cadastrado ainda.</p>
+            <?php if (session()->get('admin_logado')): ?>
+                <a href="<?= base_url('/admin/sensor/novo') ?>" style="margin-top:1rem;display:inline-block;">
+                    Cadastrar primeiro sensor
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
         <div class="sensores-grid">
-            <!-- SENSOR TEMPERATURA -->
-        <div class="cardi" onclick="mostrarSensor()">
-            <h3>Sensor de Temperatura</h3>
-            <img src="assets/images/Sensores/sensor_temperatura.png" alt="Sensor de temperatura">
-            <p>Identifica variações de calor ou frio em um ambiente ou objeto.</p>
+            <?php foreach ($sensores as $s): ?>
+                <div class="cardi" onclick="mostrarSensor(<?= $s['ID_SENSOR'] ?>)">
+
+                    <?php if (!empty($s['FOTO'])): ?>
+                        <img src="<?= base_url($s['FOTO']) ?>"
+                             alt="<?= esc($s['NOME']) ?>"
+                             style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-bottom:10px;"
+                             onerror="this.style.display='none'">
+                    <?php else: ?>
+                        <div style="width:100%;height:80px;display:flex;align-items:center;justify-content:center;opacity:.3;font-size:48px;">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                    <?php endif; ?>
+
+                    <h3><?= esc($s['NOME']) ?></h3>
+                    <p><?= esc($s['DESCRICAO']) ?></p>
+
+                    <span style="display:inline-block;margin-top:8px;font-size:12px;color:var(--color-accent,#3a86ff);font-weight:600;">
+                        Ver detalhes →
+                    </span>
+                </div>
+            <?php endforeach; ?>
         </div>
-
-        <!-- SENSOR PROXIMIDADE -->
-        <div class="cardi" onclick="mostrarProximidade()">
-            <h3>Sensor de Proximidade</h3>
-            <img src="assets/images/Sensores/sensor_proximidade.png" alt="Sensor de proximidade">
-            <p>Detecta quando um objeto está próximo sem precisar de contato físico direto.</p>
-        </div>
-
-        <!-- SENSOR UMIDADE -->
-        <div class="cardi" onclick="mostrarUmidade()">
-            <h3>Sensor de Umidade</h3>
-            <img src="assets/images/Sensores/sensor_umidade.png" alt="Sensor de umidade">
-            <p>Mede a quantidade de vapor de água presente no ar do ambiente.</p>
-        </div>
-
-        <!-- SENSOR LUZ -->
-        <div class="cardi" onclick="mostrarLuz()">
-            <h3>Sensor de Luz</h3>
-            <img src="assets/images/Sensores/sensor_luz.png" alt="Sensor de luz">
-            <p>Mede a intensidade da luz no ambiente para ajustar brilho ou iluminação.</p>
-        </div>
-
-        <!-- SENSOR MOVIMENTO -->
-        <div class="cardi" onclick="mostrarMovimento()">
-            <h3>Sensor de Movimento</h3>
-            <img src="assets/images/Sensores/sensor_movimento.png" alt="Sensor de movimento">
-            <p>Detecta presença de pessoas através da variação de calor corporal.</p>
-        </div>
-
-        <!-- SENSOR ULTRASSÔNICO -->
-        <div class="cardi" onclick="mostrarUltrassonico()">
-            <h3>Sensor Ultrassônico</h3>
-            <img src="assets/images/Sensores/sensor_ultrassonico.png" alt="Sensor ultrassônico">
-            <p>Calcula a distância até objetos usando ondas sonoras refletidas.</p>
-        </div>
-
-        <!-- SENSOR GÁS -->
-        <div class="cardi" onclick="mostrarGas()">
-            <h3>Sensor de Gás/Fumaça</h3>
-            <img src="assets/images/Sensores/sensor_gas.png" alt="Sensor de gás">
-            <p>Identifica a presença de gases ou fumaça que podem indicar perigo.</p>
-        </div>
-
-        <!-- SENSOR PRESSÃO -->
-        <div class="cardi" onclick="mostrarPressao()">
-            <h3>Sensor de Pressão (Barômetro)</h3>
-            <img src="assets/images/Sensores/sensor_pressao.png" alt="Sensor de pressão">
-            <p>Mede a pressão do ar para indicar clima ou altitude.</p>
-        </div>
-
-        <!-- SENSOR TOQUE -->
-        <div class="cardi" onclick="mostrarToque()">
-            <h3>Sensor de Toque</h3>
-            <img src="assets/images/Sensores/sensor_toque.png" alt="Sensor de toque">
-            <p>Reconhece o contato físico direto em superfícies sensíveis ao toque.</p>
-        </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-                <script>
-                function popupSensor(titulo, texto, imagem){
-                Swal.fire({
-                    title: titulo,
-                    html: `
-                    <div style="text-align:left; font-size:16px; line-height:1.8; padding:10px;">
-                        ${texto}
-                    </div>
-                    `,
-                    imageUrl: imagem,
-                    imageWidth: 420,
-                    imageHeight: 250,
-                    confirmButtonText: "Fechar",
-                    background: "#ffffff",
-                    color: "#222",
-                    width: "650px",
-                    padding: "1.5em",
-                    confirmButtonColor:  "#3a86ff",
-                    customClass: {
-                    title: "titulo-alerta",
-                    popup: "popup-bonito"
-                    }
-                });
-                }
-
-                function mostrarSensor(){
-                popupSensor("Sensor de Temperatura", `
-                <p><b>Função:</b> Mede a temperatura de ambientes, objetos ou sistemas.</p>
-                <p><b>Uso:</b> Muito utilizado em casas inteligentes, indústrias, estufas e automação.</p>
-                <p><b>Exemplo:</b> Acionar ventiladores quando a temperatura estiver alta.</p>
-                <p><b>Benefício:</b> Ajuda no controle térmico e economia de energia.</p>
-                `, "assets/images/Sensores/sensor_temperatura.png");
-                }
-
-                function mostrarProximidade(){
-                popupSensor("Sensor de Proximidade", `
-                <p><b>Função:</b> Detecta objetos próximos sem contato físico.</p>
-                <p><b>Uso:</b> Celulares, portas automáticas e robótica.</p>
-                <p><b>Exemplo:</b> Apagar tela do celular durante chamadas.</p>
-                <p><b>Benefício:</b> Mais praticidade e automação.</p>
-                `, "assets/images/Sensores/sensor_proximidade.png");
-                }
-
-                function mostrarUmidade(){
-                popupSensor("Sensor de Umidade", `
-                <p><b>Função:</b> Mede a umidade do ar.</p>
-                <p><b>Uso:</b> Agricultura, estufas e meteorologia.</p>
-                <p><b>Exemplo:</b> Controlar irrigação automática.</p>
-                <p><b>Benefício:</b> Melhora conforto e produção.</p>
-                `, "assets/images/Sensores/sensor_umidade.png");
-                }
-
-                function mostrarLuz(){
-                popupSensor("Sensor de Luz", `
-                <p><b>Função:</b> Mede intensidade luminosa.</p>
-                <p><b>Uso:</b> Celulares e iluminação inteligente.</p>
-                <p><b>Exemplo:</b> Ajustar brilho da tela automaticamente.</p>
-                <p><b>Benefício:</b> Economia de energia.</p>
-                `, "assets/images/Sensores/sensor_luz.png");
-                }
-
-                function mostrarMovimento(){
-                popupSensor("Sensor de Movimento", `
-                <p><b>Função:</b> Detecta presença humana.</p>
-                <p><b>Uso:</b> Alarmes e luzes automáticas.</p>
-                <p><b>Exemplo:</b> Acender luz ao entrar no cômodo.</p>
-                <p><b>Benefício:</b> Segurança e praticidade.</p>
-                `, "assets/images/Sensores/sensor_movimento.png");
-                }
-
-                function mostrarUltrassonico(){
-                popupSensor("Sensor Ultrassônico", `
-                <p><b>Função:</b> Mede distância por ondas sonoras.</p>
-                <p><b>Uso:</b> Carros e robôs.</p>
-                <p><b>Exemplo:</b> Sensor de ré.</p>
-                <p><b>Benefício:</b> Evita colisões.</p>
-                `, "assets/images/Sensores/sensor_ultrassonico.png");
-                }
-
-                function mostrarGas(){
-                popupSensor("Sensor de Gás/Fumaça", `
-                <p><b>Função:</b> Detecta gases perigosos e fumaça.</p>
-                <p><b>Uso:</b> Casas e empresas.</p>
-                <p><b>Exemplo:</b> Alarme de vazamento.</p>
-                <p><b>Benefício:</b> Segurança contra acidentes.</p>
-                `, "assets/images/Sensores/sensor_gas.png");
-                }
-
-                function mostrarPressao(){
-                popupSensor("Sensor de Pressão", `
-                <p><b>Função:</b> Mede pressão atmosférica.</p>
-                <p><b>Uso:</b> Meteorologia e altitude.</p>
-                <p><b>Exemplo:</b> Previsão do tempo.</p>
-                <p><b>Benefício:</b> Informações climáticas precisas.</p>
-                `, "assets/images/Sensores/sensor_pressao.png");
-                }
-
-                function mostrarToque(){
-                popupSensor("Sensor de Toque", `
-                <p><b>Função:</b> Detecta toque físico.</p>
-                <p><b>Uso:</b> Telas touch e botões digitais.</p>
-                <p><b>Exemplo:</b> Smartphone.</p>
-                <p><b>Benefício:</b> Interface moderna e rápida.</p>
-                `, "assets/images/Sensores/sensor_toque.png");
-                }
-                </script>
-
-                <style>
-                .popup-bonito{
-                border-radius:20px;
-                box-shadow:0 10px 30px rgba(0,0,0,0.20);
-                }
-
-                .titulo-alerta{
-                text-align:center;
-                font-size:28px;
-                font-weight:bold;
-                color: #3a86ff;
-                }
-
-                .cardi{
-                cursor:pointer;
-                }
-                </style>
-
-                </div> 
-            </main> 
-    
-</html>
+    <?php endif; ?>
+</main>
 
 <?= view('sistema/layout/footer') ?>

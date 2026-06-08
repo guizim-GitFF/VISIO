@@ -7,8 +7,8 @@
 
     const inputEmail = document.getElementById('email');
     const inputSenha = document.getElementById('senha');
-    const erroEmail  = document.getElementById('erroEmail');
-    const erroSenha  = document.getElementById('erroSenha');
+    const erroEmail = document.getElementById('erroEmail');
+    const erroSenha = document.getElementById('erroSenha');
 
     /* ── Limpa os erros ao digitar ── */
     if (inputEmail) {
@@ -26,58 +26,59 @@
     }
 
     /* ── Validação no submit ── */
+    /* TODO: VALIDAÇÃO TEMPORARIAMENTE DESATIVADA — reativar antes de ir para produção */
     form.addEventListener('submit', function (event) {
         let formValido = true;
 
         /* Valida e-mail */
-        if (!inputEmail || inputEmail.value.trim() === '') {
-            if (erroEmail) erroEmail.innerText = 'O e-mail é obrigatório.';
-            if (inputEmail) {
-                inputEmail.classList.add('input-error');
-                inputEmail.classList.remove('input-valid');
-            }
-            formValido = false;
-        } else {
-            if (erroEmail) erroEmail.innerText = '';
-            if (inputEmail) {
-                inputEmail.classList.remove('input-error');
-                inputEmail.classList.add('input-valid');
-            }
-        }
+        // if (!inputEmail || inputEmail.value.trim() === '') {
+        //     if (erroEmail) erroEmail.innerText = 'O e-mail é obrigatório.';
+        //     if (inputEmail) {
+        //         inputEmail.classList.add('input-error');
+        //         inputEmail.classList.remove('input-valid');
+        //     }
+        //     formValido = false;
+        // } else {
+        //     if (erroEmail) erroEmail.innerText = '';
+        //     if (inputEmail) {
+        //         inputEmail.classList.remove('input-error');
+        //         inputEmail.classList.add('input-valid');
+        //     }
+        // }
 
         /* Valida senha */
-        if (!inputSenha || inputSenha.value.trim() === '') {
-            if (erroSenha) erroSenha.innerText = 'A senha é obrigatória.';
-            if (inputSenha) {
-                inputSenha.classList.add('input-error');
-                inputSenha.classList.remove('input-valid');
-            }
-            formValido = false;
-        } else {
-            if (erroSenha) erroSenha.innerText = '';
-            if (inputSenha) {
-                inputSenha.classList.remove('input-error');
-                inputSenha.classList.add('input-valid');
-            }
-        }
+        // if (!inputSenha || inputSenha.value.trim() === '') {
+        //     if (erroSenha) erroSenha.innerText = 'A senha é obrigatória.';
+        //     if (inputSenha) {
+        //         inputSenha.classList.add('input-error');
+        //         inputSenha.classList.remove('input-valid');
+        //     }
+        //     formValido = false;
+        // } else {
+        //     if (erroSenha) erroSenha.innerText = '';
+        //     if (inputSenha) {
+        //         inputSenha.classList.remove('input-error');
+        //         inputSenha.classList.add('input-valid');
+        //     }
+        // }
 
         /* Se inválido: exibe toast e cancela o submit */
-        if (!formValido) {
-            event.preventDefault();
+        // if (!formValido) {
+        //     event.preventDefault();
 
-            if (window.Swal) {
-                Swal.fire({
-                    toast:            true,
-                    position:         'top-end',
-                    icon:             'warning',
-                    title:            'Preencha todos os campos antes de continuar.',
-                    showConfirmButton: false,
-                    timer:            3500,
-                    timerProgressBar: true,
-                });
-            }
-            return;
-        }
+        //     if (window.Swal) {
+        //         Swal.fire({
+        //             toast:            true,
+        //             position:         'top-end',
+        //             icon:             'warning',
+        //             title:            'Preencha todos os campos antes de continuar.',
+        //             showConfirmButton: false,
+        //             timer:            3500,
+        //             timerProgressBar: true,
+        //         });
+        //     }
+        //     return;
+        // }
 
         /*
          * Se válido: não fazemos NADA — o submit segue normalmente.

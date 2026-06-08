@@ -3,6 +3,8 @@
 <p id="index-login-msg" class="contato-feedback index-banner" hidden></p>
 <main class="hero">
 
+
+
     <section class="intro">
         <h1>Identificação Inteligente de Sensores IoT</h1>
         <p>
@@ -50,7 +52,7 @@
 
                 <div class="item">
                     <img class="theme-img" src="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>"
-                        data-light="<?= base_url('assets/images/logos/Logo/LogoLight.png') ?>"
+                        data-light="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>"
                         data-dark="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>" alt="Logo">
                 </div>
             </div>
@@ -66,6 +68,7 @@
 </main>
 
 <section class="services">
+    
     <video autoplay muted loop playsinline class="video-bg">
         <source src="<?= base_url('assets/images/Videos/fun_video.mp4') ?>" type="video/mp4">
     </video>
@@ -152,11 +155,17 @@
     <div class="video-container">
 
         <div class="fundo-branco"></div>
-
         <video autoplay muted loop playsinline class="video">
             <source src="<?= base_url('assets/images/Videos/VISIO.mp4') ?>" type="video/mp4">
         </video>
     </div>
+    
+    <br>
+    <p class="video-descricao">
+        Conheça a plataforma VISIO, um sistema desenvolvido para identificação inteligente
+        de sensores IoT utilizando visão computacional e tecnologias de inteligência artificial.
+    </p>
+    
 </section>
 <hr>
 

@@ -3,6 +3,7 @@
 
     <main class="questoes-page" style="display: grid; place-items: center; min-height: 60vh;">
         <div class="questao-box" style="text-align: center;">
+            <br><br><br>
             <h1 class="questoes-titulo">Resultado do Quiz</h1>
             <p style="font-size: 1.5rem; margin: 1rem 0;">
                 Você acertou <strong><?= $acertos ?></strong> de <strong><?= $total ?></strong> perguntas.

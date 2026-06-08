@@ -35,19 +35,16 @@ class UsuarioController extends BaseController
 
         $model = new UsuarioModel();
 
-        // 1. Verifica se CPF já existe
         if ($model->where('CPF', $cpf)->first()) {
             return redirect()->to('/usuario/cadastro')
                 ->with('erro', 'CPF já cadastrado.');
         }
 
-        // 2. Verifica se o E-mail já existe (Regra UNIQUE do Banco)
         if ($model->where('EMAIL', $email)->first()) {
             return redirect()->to('/usuario/cadastro')
                 ->with('erro', 'Este e-mail já está em uso.');
         }
 
-        // Inserção de dados usando o método nativo 'insert' do CI4
         $model->insert([
             'CPF' => $cpf,
             'EMAIL' => $email,
@@ -57,18 +54,17 @@ class UsuarioController extends BaseController
             'TELEFONE' => $tel,
         ]);
 
-        // Redireciona para o LOGIN, pois a área de início agora é protegida
         return redirect()->to('/login')
             ->with('sucesso', 'Cadastro realizado com sucesso! Faça login para continuar.');
     }
 
     // ---------------------------------------------------------------
-    // INÍCIO DO USUÁRIO LOGADO
+    // INÍCIO DO USUÁRIO LOGADO — CORRIGIDO: caminho de view correto
     // ---------------------------------------------------------------
 
     public function inicio(): string
     {
-        return view('sistema/usuario_logado/inicio/index');
+        return view('sistema/usuario/inicio/index');
     }
 
     // ---------------------------------------------------------------
@@ -80,7 +76,7 @@ class UsuarioController extends BaseController
         $cpf = session()->get('usuario_cpf');
         $model = new UsuarioModel();
 
-        return view('sistema/usuario/perfil_usuario/index', [
+        return view('sistema/usuario_logado/perfil/index', [
             'usuario' => $model->where('CPF', $cpf)->first(),
         ]);
     }
@@ -91,10 +87,9 @@ class UsuarioController extends BaseController
         $model = new UsuarioModel();
         $email = $this->request->getPost('email');
 
-        // Verifica se o NOVO e-mail escolhido já não está a ser usado por outra pessoa
         $emailExistente = $model->where('EMAIL', $email)->where('CPF !=', $cpf)->first();
         if ($emailExistente) {
-            return redirect()->to('/usuario/perfil')
+            return redirect()->to('/perfil')
                 ->with('erro', 'Este e-mail já está em uso por outra conta.');
         }
 
@@ -110,11 +105,9 @@ class UsuarioController extends BaseController
             $dados['SENHA'] = password_hash($novaSenha, PASSWORD_BCRYPT);
         }
 
-        // Método nativo do CI4 para atualizar a linha cujo ID é o $cpf
         $model->update($cpf, $dados);
 
-
-        return redirect()->to('/usuario/perfil')
+        return redirect()->to('/perfil')
             ->with('sucesso', 'Perfil atualizado com sucesso!');
     }
 
@@ -127,9 +120,17 @@ class UsuarioController extends BaseController
         $cpf = session()->get('usuario_cpf');
         $model = new UsuarioModel();
 
-        // Assumindo que você criará esse método no UsuarioModel depois (usaremos JOIN para buscar do BD)
         return view('sistema/usuario/questoes/historico', [
             'historico' => $model->historicoPorCpf($cpf),
+            'respostas' => $model->historicoPorCpf($cpf),
+            'total' => count($model->historicoPorCpf($cpf)),
+            'total_acertos' => 0, // será calculado na view
         ]);
+    }
+
+    //TENTANDO FZR O RECUPERAR SENHA
+    public function esqueceu_senha(): string
+    {
+        return view('sistema/usuario/esqueceu_senha/index');
     }
 }

@@ -32,7 +32,7 @@ class Database extends Config
         'DSN'          => '',
         'hostname'     => 'localhost',     // ← geralmente não precisa mudar
         'username'     => 'root',          // ← usuário do MySQL (XAMPP = root)
-        'password'     => '',              // ← senha do MySQL (XAMPP = vazio)
+        'password'     => 'root',              // ← senha do MySQL (XAMPP = vazio)
         'database'     => 'bd_visio',         // ← nome do banco de dados
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',

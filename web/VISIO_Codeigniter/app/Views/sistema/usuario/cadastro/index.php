@@ -4,7 +4,8 @@
         <div class="signup-form">
             <h1>Criar Conta</h1>
             <p>Cadastre-se para acessar todas as funcionalidades da plataforma VISIO.</p>
-            <form action="api/usuarios.php" method="POST" id="form">
+            <form action="<?= base_url('/usuario/cadastro') ?>" method="post" id="form">
+                <?= csrf_field() ?>
                 <input type="hidden" name="redirect_html" value="1">
                 <input type="text" name="nome" id="nome" placeholder="Nome">
                 <span class="erro" id="erroNome"></span>
@@ -31,8 +32,8 @@
             </div>
         </div>
         <div class="signup-image">
-            <!-- <img src="<?= base_url('assets/images/logos/Icone/IconeDark.png') ?>"
-            <img class="theme-img" src="<?= base_url('assets/images/logos/Icone/IconeDark.png') ?>"
+            <img src="<?= base_url('assets/images/logos/Icone/IconeDark.png') ?>" <img class="theme-img"
+                src="<?= base_url('assets/images/logos/Icone/IconeDark.png') ?>"
                 data-light="<?= base_url('assets/images/logos/Icone/IconeLight.png') ?>"
                 data-dark="<?= base_url('assets/images/logos/Icone/IconeDark.png') ?>" alt="Logo"
                 style="width: 100%;  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">

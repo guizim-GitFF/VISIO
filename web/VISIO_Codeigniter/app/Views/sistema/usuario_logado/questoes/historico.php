@@ -3,6 +3,7 @@
 
     <main class="questoes-page">
         <div class="questoes-container">
+            <br><br><br>
             <h1 class="questoes-titulo">Histórico de Respostas</h1>
 
             <?php if (session()->getFlashdata('sucesso')): ?>

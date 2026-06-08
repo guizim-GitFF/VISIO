@@ -3,7 +3,7 @@
 
     <main class="questoes-page">
         <div class="questoes-container questoes-layout">
-            <div class="questao-box">
+            <div class="questao-box"><br><br><br>
                 <h1 class="questoes-titulo">Quiz IoT</h1>
                 <p class="questoes-intro">Responda às questões cadastradas no sistema. As perguntas são carregadas
                     dinamicamente.</p>

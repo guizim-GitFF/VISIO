@@ -24,7 +24,7 @@
     <nav>
       <img src="<?= base_url('assets/images/logos/Logo/LogoDark2.png') ?>" class="logo" alt="Logo plataforma VISIO"
         id="logo" data-dark="<?= base_url('assets/images/logos/Logo/LogoDark2.png') ?>"
-        data-light="<?= base_url('assets/images/logos/Logo/LogoLight2.png') ?>">
+        data-light="<?= base_url('assets/images/logos/Logo/LogoDark2.png') ?>">
 
       <button class="hamburger" id="hamburger" aria-label="Abrir menu de navegação" aria-expanded="false"
         aria-controls="nav-links">
@@ -39,8 +39,8 @@
 
         <?php if (session()->get('usuario_logado')): ?>
           <li><a href="<?= base_url('/quiz') ?>"><i class="fa-solid fa-circle-question"></i> Questões</a></li>
-          <li><a href="<?= base_url('/usuario/perfil') ?>">
-              <i class="fa-solid fa-user"></i> <?= esc(session()->get('usuario_nome') ?: 'Perfil') ?>
+          <li><a href="<?= base_url('/perfil') ?>">
+              <i class="fa-solid fa-user"></i> <?= 'Perfil' ?>
             </a></li>
           <li><a href="<?= base_url('/logout') ?>"><i class="fa-solid fa-right-from-bracket"></i> Sair</a></li>
         <?php else: ?>
@@ -218,4 +218,5 @@
     }
   </script>
 </body>
+
 </html>

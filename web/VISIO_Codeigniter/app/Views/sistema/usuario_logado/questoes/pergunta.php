@@ -1,5 +1,9 @@
 <?= view('sistema/layout/header_logado') ?>
-
+<style>
+    .questoes-page{
+        
+    }
+</style>
 
     <main class="questoes-page">
         <div class="questoes-container questoes-layout">
@@ -9,6 +13,7 @@
                     <p class="contato-feedback contato-feedback--erro"><?= session()->getFlashdata('erro') ?></p>
                 <?php endif; ?>
 
+                <br><br><br>
                 <p class="questoes-progresso">Pergunta <?= $indice ?> de <?= $total ?></p>
                 <h1 class="questoes-titulo"><?= esc($pergunta['DESCRICAO']) ?></h1>
 

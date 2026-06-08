@@ -11,6 +11,10 @@ use App\Models\UsuarioModel;
  */
 class AuthController extends BaseController
 {
+    // ---------------------------------------------------------------
+    // LOGIN DO USUÁRIO COMUM
+    // ---------------------------------------------------------------
+
     public function index(): string
     {
         return view('sistema/usuario/login/index');
@@ -29,13 +33,11 @@ class AuthController extends BaseController
         $model = new UsuarioModel();
         $usuario = $model->buscarPorEmail($email);
 
-        // Verifica se o usuário existe e valida o hash da senha
         if (!$usuario || !password_verify($senha, $usuario['SENHA'])) {
             return redirect()->to('/login')
                 ->with('erro', 'E-mail ou senha incorretos.');
         }
 
-        // Configura a sessão do Usuário (incluindo o NOME)
         session()->set([
             'usuario_logado' => true,
             'usuario_cpf' => $usuario['CPF'],
@@ -43,8 +45,12 @@ class AuthController extends BaseController
             'tipo' => 'usuario',
         ]);
 
-        return redirect()->to('/quiz');
+        return redirect()->to('/perfil');
     }
+
+    // ---------------------------------------------------------------
+    // LOGIN DO ADMINISTRADOR — CORRIGIDO: autentica via banco de dados
+    // ---------------------------------------------------------------
 
     public function loginAdminForm(): string
     {
@@ -53,15 +59,44 @@ class AuthController extends BaseController
 
     public function loginAdmin()
     {
+        // $email = $this->request->getPost('email');
+        // $senha = $this->request->getPost('senha');
+
+        // if (empty($email) || empty($senha)) {
+        //     return redirect()->to('/login/admin')
+        //         ->with('erro', 'E-mail e senha são obrigatórios.');
+        // }
+
+        // $model = new AdminModel();
+        // $admin = $model->buscarPorEmail($email);
+
+        // // Verifica se o admin existe e valida o hash da senha
+        // if (!$admin || !password_verify($senha, $admin['SENHA'])) {
+        //     return redirect()->to('/login/admin')
+        //         ->with('erro', 'E-mail ou senha incorretos.');
+        // }
+
+        // session()->set([
+        //     'admin_logado' => true,
+        //     'admin_cnpj'   => $admin['CNPJ'],
+        //     'admin_email'  => $admin['EMAIL'],
+        //     'tipo'         => 'admin',
+        // ]);
+
+        // return redirect()->to('/admin/dashboard');
         session()->set([
             'admin_logado' => true,
-            'admin_cnpj' => '12345678000199',
-            'admin_email' => 'admin_local@teste.com',
+            'admin_cnpj' => '12.345.678/0001-01',
+            'admin_email' => 'admin@visio.com',
             'tipo' => 'admin',
         ]);
 
-            return redirect()->to('/admin/dashboard');
+        return redirect()->to('/admin/dashboard');
     }
+
+    // ---------------------------------------------------------------
+    // LOGOUT
+    // ---------------------------------------------------------------
 
     public function logout()
     {

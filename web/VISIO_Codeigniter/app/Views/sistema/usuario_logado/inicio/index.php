@@ -23,13 +23,13 @@
                     <img src="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>" alt="Logo">
                 </div>
                 <div class="item">
-                    <img src="<?= base_url('assets/images/carrossel/identifique.png') ?>" alt="Identifique">
+                    <img src="<?= base_url('assets/images/Carrosel/identifique.png') ?>" alt="Identifique">
                 </div>
                 <div class="item">
-                    <img src="<?= base_url('assets/images/carrossel/aprender.png') ?>" alt="Aprender">
+                    <img src="<?= base_url('assets/images/Carrosel/aprender.png') ?>" alt="Aprender">
                 </div>
                 <div class="item">
-                    <img src="<?= base_url('assets/images/carrossel/educacao.png') ?>" alt="Educação">
+                    <img src="<?= base_url('assets/images/Carrosel/educacao.png') ?>" alt="Educação">
                 </div>
                 <div class="item">
                     <img src="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>" alt="Logo">

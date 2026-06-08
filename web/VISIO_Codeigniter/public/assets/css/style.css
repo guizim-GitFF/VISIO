@@ -1,9 +1,7 @@
 /* 
    PALETA DE CORES
 */
-
 :root {
-
     /* === FUNDOS === */
     --color-bg-base: #000000;
     --color-bg-dark: #090b10;
@@ -17,7 +15,6 @@
     /* === SUPERFÍCIES === */
     --color-surface-dark: #17182c;
     --color-surface-card: #131b4f;
-    --color-surface-card-hover: #313a72;
     --color-surface-btn: #2a3472;
     --color-surface-btn-hover: #515b99;
 
@@ -78,8 +75,7 @@ body.light {
 
     /* === SUPERFÍCIES === */
     --color-surface-dark: #e9edf5;
-    --color-surface-card: #ffffff;
-    --color-surface-card-hover: #dfe6f3;
+    --color-surface-card: #ffffff !important;
     --color-surface-btn: #dbe4ff;
     --color-surface-btn-hover: #c7d2fe;
 
@@ -156,6 +152,7 @@ header {
     width: 100%;
     z-index: 1000;
     background-color: #0f172a;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
 }
 
 nav {
@@ -328,12 +325,12 @@ body.light .services::after {
 .services .emp-card {
     background: rgb(17, 12, 12);
     border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: rgb(22, 22, 24);
+    box-shadow: rgb(0, 154, 255, 0.3);
 }
 
 .secao-video {
     min-height: 600px;
-    
+
 }
 
 .video-bg {
@@ -344,7 +341,7 @@ body.light .services::after {
     height: 100%;
     object-fit: cover;
     z-index: 0;
-    
+
 }
 
 .container {
@@ -420,7 +417,7 @@ body.light .services::after {
 .card1:hover {
     transform: translateY(-8px);
     background: var(--color-surface-card);
-    box-shadow: 0 20px 40px rgba(0, 176, 235, 0.6);
+    box-shadow: 0 20px 40px rgba(0, 154, 255, 0.3);
 }
 
 .card1 img {
@@ -591,20 +588,20 @@ body.light .services::after {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    color: #0077ff;
 }
 
 .login-footer a {
     color: var(--color-primary);
     text-decoration: none;
+
 }
 
-.login-footer a:hover {
-    color: var(--color-primary-hover);
-}
 
 .login-image img {
     width: 500px;
     max-width: 100%;
+    border-radius: 15px;
 }
 
 /* 
@@ -703,6 +700,7 @@ body.light .services::after {
     width: 500px;
     max-width: 100%;
     margin: auto;
+    border-radius: 15px;
 }
 
 /* 
@@ -1325,24 +1323,30 @@ table select {
     max-width: 800px;
     margin: 0 auto;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 15px rgba(0, 0, 0, 0.2);
+    background-color: transparent;
 }
 
 .carrossel {
     width: 100%;
     overflow: hidden;
     border-radius: 15px;
+    background-color: transparent !important;
+    /* Remove fundo branco */
 }
 
 .carrossel-interno {
     display: flex;
     width: 500%;
-    /* 5 itens (4 originais + 1 repetido) */
     animation: slide-auto 16s infinite ease-in-out;
+    background-color: transparent !important;
 }
 
 .item {
     width: 100%;
+    background-color: transparent !important;
+    /* Remove fundo branco */
+    background: none !important;
 }
 
 .item img {
@@ -1438,7 +1442,7 @@ table select {
         transform: scale(1);
     }
 
-    
+
 }
 
 .video-bg-sobre {
@@ -1514,10 +1518,6 @@ td {
     vertical-align: middle;
 }
 
-tr:hover td {
-    background-color: var(--color-bg-input);
-    color: var(--color-text-primary);
-}
 
 tbody tr:last-child td {
     border-bottom: none;
@@ -1676,10 +1676,7 @@ tbody tr:last-child td {
     font-weight: 500;
 }
 
-.menu a:hover,
 .menu a.active {
-    background: rgba(58, 134, 255, 0.1);
-    color: var(--color-accent-adm, #3a86ff);
     transform: translateX(5px);
     /* Pequeno salto pro lado ao focar */
 }
@@ -1725,7 +1722,7 @@ tbody tr:last-child td {
 }
 
 .data-card {
-    background: var(--color-bg-card, #1a1a24);
+   
     padding: 25px;
     border-radius: 20px;
     border: 1px solid var(--color-border-adm, #2a2a35);
@@ -1741,7 +1738,6 @@ tbody tr:last-child td {
 .data-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    border-color: rgba(58, 134, 255, 0.4);
 }
 
 .card-header {
@@ -2308,7 +2304,6 @@ body.light .texto_rodape {
 /* Faixa Inferior */
 body.light .direitos_reservados {
     background-color: #d8d9e1;
-    ;
     text-align: center;
     margin-top: 40px;
     padding: 20px;
@@ -2513,11 +2508,6 @@ body.light .direitos_reservados {
     color: #ffffff;
 }
 
-/*TENTANDO MUDAR A COR DO CARD DEBAIXO NO INDEX*/
-/* .card1 background removido — usar var(--color-bg-card-dark) definido acima */
-/* 
-   VALIDAÇÃO DE FORMULÁRIOS — estados visuais via classe
-*/
 .input-error {
     border: 2px solid var(--color-error) !important;
 }
@@ -2569,10 +2559,10 @@ body.light .btn-login-adm {
 }
 
 
-/*agr vai - fazer dnv pq ta uma bosta*/
+/* agr vai - fazer dnv pq ta uma bosta
 input[type="file"] {
     display: none;
-}
+} */
 
 .custom-file-upload {
     background-color: #0077ff;
@@ -2585,20 +2575,27 @@ input[type="file"] {
 /*Videoo*/
 .video-container {
     position: relative;
-    width: 90%;
-    max-width: 900px;
-    margin: 80px auto;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 15px;
+    max-width: 800px;
+    /* Altere aqui o tamanho - 480px, 400px, 320px */
+    aspect-ratio: 16 / 9;
+    border-radius: 15px;
+    width: 100%;
     display: flex;
     justify-content: center;
+    /* Centro horizontal */
+    align-items: center;
+    /* Centro vertical */
+    margin: 0 auto;
 }
 
 /* VIDEO */
 .video {
     position: relative;
-    width: 80%;
     border-radius: 15px;
-    z-index: 2;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 body.light .data-card,
@@ -2624,6 +2621,7 @@ header {
     background-color: var(--color-bg-sidebar);
     /* Usa a variável correta */
     border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* Services - O texto_forçado branco não funcionava no modo claro */
@@ -2679,8 +2677,8 @@ body.light .brand-text p {
 }
 
 /* VIDEO BACKGROUND FIXO */
-body.light .video-container {
-    background: #000;
+body.light .video-descricao {
+    color: #000000;
     /* Fundo preto atrás do vídeo para contraste */
 }
 
@@ -2695,7 +2693,6 @@ body.light .card {
 
 
 body.light .card:hover {
-    background: var(--color-surface-card-hover);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -2908,28 +2905,6 @@ body.high-contrast #theme-toggle {
 }
 
 
-/* ================================================================
-   CORREÇÕES DE FONTE E MODO CLARO — VISIO
-   ================================================================
-
-   PROBLEMA 1 — Escalamento de fonte:
-     O JS do painel de acessibilidade faz  document.body.style.fontSize = '18px'.
-     Elementos com font-size em px ABSOLUTO ignoram isso.
-     Aqui convertemos os principais para em (relativo ao body),
-     então quando o body muda, eles escalam junto.
-
-   PROBLEMA 2 — Modo claro com texto branco:
-     No tema claro, --color-primary: #ffffff (branco).
-     Vários elementos usam essa variável como background, gerando
-     botões brancos com texto branco — invisíveis.
-     Também há cores hardcoded (#fff, white) no footer e nav.
-   ================================================================ */
-
-
-/* ---------------------------------------------------------------
-   1. ESCALAMENTO DE FONTE — converte px fixo para em
-      1em = tamanho atual do body (padrão 16px, sobe/desce via JS)
-   --------------------------------------------------------------- */
 
 h1 {
     font-size: 2.8em;
@@ -3086,16 +3061,6 @@ textarea {
     font-size: 0.88em;
 }
 
-
-/* ---------------------------------------------------------------
-   2. MODO CLARO — correções de contraste
-
-   Raiz do problema:
-     --color-primary: #ffffff em body.light
-     Isso torna botões/links invisíveis (branco sobre branco).
-     Solução: sobrescreve os elementos que usam a var como background.
-   --------------------------------------------------------------- */
-
 /* ── Navegação ── */
 /* Nav link: --color-primary é branco no claro → azul real */
 body.light .nav-links a {
@@ -3169,7 +3134,6 @@ body.light .emp-btn {
 }
 
 body.light .btn-salvar:hover,
-body.light .btn-login-adm:hover,
 body.light .lista-btn-novo:hover,
 body.light .identificador-btn:hover,
 body.light .btn_confirmar:hover {
@@ -3215,25 +3179,12 @@ body.light .adm-page-title {
     color: var(--color-text-primary);
 }
 
-body.light .card-title,
-body.light .lista-sub,
-body.light .adm-form-card label,
-body.light .form-section-label {
-    color: var(--color-text-muted);
-}
-
 body.light .number {
     color: var(--color-text-primary);
 }
 
 body.light .menu a {
     color: var(--color-text-muted);
-}
-
-body.light .menu a:hover,
-body.light .menu a.active {
-    background: rgba(37, 99, 235, 0.1);
-    color: #2563eb;
 }
 
 /* ── Feedback ── */
@@ -3295,12 +3246,24 @@ body.light .identificador-resultado {
 body.light header {
     background-color: var(--color-bg-sidebar);
     border-bottom-color: var(--color-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
+.video-descricao {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #fff;
+    line-height: 1.8;
 
 
+}
 
-
-
-/*HR*/
+.footer-contact i,
+.social i {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
 

@@ -1,3 +1,3 @@
 <footer>
-        © 2026 VISIO — Plataforma Inteligente para Gestão de Sensores IoT.
-      </footer>
+        &copy; 2026 VISIO – Plataforma Inteligente para Sensores IoT.
+    </footer>

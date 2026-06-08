@@ -21,13 +21,15 @@
         <button type="submit" style="color:#fff">Entrar</button>
       </form>
       <div class="login-footer">
-        <p>Não tem conta? <a href="<?= base_url('/usuario/cadastro') ?>">Cadastre-se</a></p>
+        <p>Não tem conta? <a href="<?= base_url('/usuario/cadastro') ?>" style="color: #0084f7;">Cadastre-se</a></p>
+        <p> <a href="<?= base_url('/usuario/esqueceu_senha') ?>" style="color: #0084f7;">Esqueceu senha?</a></p>
       </div>
     </div>
     <div class="login-image">
       <img class="theme-img" src="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>"
-                        data-light="<?= base_url('assets/images/logos/Logo/LogoLight.png') ?>"
-                        data-dark="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>" alt="Logo" style="width: 100%;  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+        data-light="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>"
+        data-dark="<?= base_url('assets/images/logos/Logo/LogoDark.png') ?>" alt="Logo"
+        style="width: 100%;  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
     </div>
   </div>
 </main>

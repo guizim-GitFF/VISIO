@@ -148,7 +148,7 @@
         </li>
 
         <li>
-          <a href="<?= base_url('/perfil_usuario') ?>">
+          <a href="<?= base_url('/perfil') ?>">
             <i class="fa-solid fa-right-to-bracket"></i> Perfil
           </a>
         </li>
